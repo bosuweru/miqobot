@@ -16,13 +16,14 @@ expand(result);
 
 /** @see {@link https://discordjs.guide/sharding/#getting-started} */
 const { ShardingManager } = require("discord.js");
+const { logger } = require("./utils/pino");
 
 const manager = new ShardingManager("src/client/bot.js", {
   token: process.env.SECRET_TOKEN,
 });
 
 manager.on("shardCreate", (shard) => {
-  console.log(`Shard ${shard.id} launched.`);
+  logger.info(`Shard ${shard.id} launched.`);
 });
 
 manager.spawn();
