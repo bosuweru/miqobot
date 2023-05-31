@@ -1,18 +1,7 @@
 "use strict";
 
-/** @see {@link https://github.com/motdotla/dotenv#readme} */
-const { config } = require("dotenv");
-const { expand } = require("dotenv-expand");
-
-const result = config({
-  path: "private/.env",
-  debug: false,
-  encoding: "utf8",
-  override: false,
-});
-
-if (result.error) throw result.error;
-expand(result);
+const { load } = require("./utils/dotenv");
+load();
 
 /** @see {@link https://discordjs.guide/sharding/#getting-started} */
 const { ShardingManager } = require("discord.js");
