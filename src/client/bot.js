@@ -9,20 +9,24 @@ const { logger } = require("../utils/pino");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
-
 const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs
-  .readdirSync(commandsPath)
-  .filter((file) => file.endsWith("js"));
+const commandsFolders = fs.readdirSync(commandsPath);
 
-for (const file of commandFiles) {
-  const filePath = path.join(commandsPath, file);
-  const command = require(filePath);
+for (const folder of commandsFolders) {
+  const categoryPath = path.join(commandsPath, folder);
+  const categoryFiles = fs
+    .readdirSync(categoryPath)
+    .filter((file) => file.endsWith(".js"));
 
-  if ("data" in command && "execute" in command) {
-    client.commands.set(command.data.name, command);
-  } else {
-    logger.warn(`The command at ${filePath} is missing required properties.`);
+  for (const file of categoryFiles) {
+    const filePath = path.join(categoryPath, file);
+    const command = require(filePath);
+
+    if ("data" in command && "execute" in command) {
+      client.commands.set(command.data.name, command);
+    } else {
+      logger.warn(`The command at ${filePath} is missing required properties.`);
+    }
   }
 }
 
