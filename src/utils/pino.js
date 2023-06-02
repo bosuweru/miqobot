@@ -2,6 +2,11 @@
 
 /** @see {@link https://getpino.io/} */
 const pino = require("pino");
-const logger = pino();
+
+const transport = pino.transport({
+  target: "pino/file",
+  options: { destination: "./log.json" },
+});
+const logger = pino(transport);
 
 module.exports = { logger };
