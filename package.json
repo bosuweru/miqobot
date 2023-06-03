@@ -1,0 +1,30 @@
+{
+  "main": "src/index.js",
+  "name": "miqobot",
+  "author": {
+    "url": "https://github.com/bosuweru",
+    "name": "Allan",
+    "email": "116328571+bosuweru@users.noreply.github.com"
+  },
+  "license": "AGPL-3.0",
+  "private": true,
+  "scripts": {
+    "dev": "node . | pino-pretty -i pid,hostname",
+    "start": "node .",
+    "deploy": "node ./private/scripts/deploy.js | pino-pretty -i pid,hostname"
+  },
+  "version": "1.0.0",
+  "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
+    "dotenv-expand": "^10.0.0",
+    "pino": "^8.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8"
+  }
+}
