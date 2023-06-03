@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      day: "friday"
+      time: "23:00"
+      interval: "weekly"
+    labels: [ ]
