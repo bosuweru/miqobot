@@ -9,8 +9,7 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "dev": "node . | pino-pretty -i pid,hostname",
-    "start": "node .",
+    "start": "node . | pino-pretty -i pid,hostname",
     "deploy": "node ./private/scripts/deploy.js | pino-pretty -i pid,hostname"
   },
   "version": "1.0.0",
