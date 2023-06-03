@@ -6,6 +6,16 @@ const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { logger } = require("../utils/pino");
 
+process
+  .on("uncaughtException", (error) => {
+    logger.fatal(`${error}`);
+    process.exit(-1);
+  })
+  .on("unhandledRejection", (reason) => {
+    logger.fatal(`${reason}`);
+    process.exit(-1);
+  });
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
