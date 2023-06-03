@@ -6,4 +6,5 @@ updates:
       day: "friday"
       time: "23:00"
       interval: "weekly"
+      timezone: "Etc/UTC"
     labels: [ ]
