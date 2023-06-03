@@ -13,7 +13,7 @@
     "start": "node .",
     "deploy": "node ./private/scripts/deploy.js | pino-pretty -i pid,hostname"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
   "dependencies": {
     "discord.js": "^14.11.0",
