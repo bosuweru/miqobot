@@ -20,7 +20,7 @@ module.exports = {
     try {
       await command.execute(interaction);
     } catch (error) {
-      logger.error(error);
+      logger.error(`${error}`);
 
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp({
