@@ -1,20 +1,21 @@
 "use strict";
 
+const { Events } = require("discord.js");
 const { Listener } = require("@sapphire/framework");
 
-class ReadyListener extends Listener {
+class Ready extends Listener {
   constructor(context, options) {
     super(context, {
       ...options,
       once: true,
-      event: "ready",
+      event: Events.Ready,
     });
   }
 
   run(client) {
     const { username, discriminator } = client.user;
-    this.container.logger.info(`${username}${discriminator} logged in.`);
+    this.container.logger.info(`${username}#${discriminator} logged in.`);
   }
 }
 
-module.exports = { ReadyListener };
+module.exports = { Ready };
