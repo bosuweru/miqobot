@@ -9,13 +9,13 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "dev": "node . | pino-pretty -i pid,hostname",
-    "start": "node .",
-    "deploy": "node ./private/scripts/deploy.js | pino-pretty -i pid,hostname"
+    "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env"
   },
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
   "dependencies": {
+    "@sapphire/framework": "^4.4.4",
+    "@sapphire/plugin-logger": "^3.0.4",
     "discord.js": "^14.11.0",
     "dotenv": "^16.1.3",
     "dotenv-expand": "^10.0.0",
