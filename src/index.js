@@ -1,34 +1,15 @@
 "use strict";
 
-const { load } = require("./utils/dotenv");
-load();
+require("@sapphire/plugin-logger/register");
+const { GatewayIntentBits } = require("discord.js");
+const { LogLevel, SapphireClient } = require("@sapphire/framework");
 
-/** @see {@link https://discordjs.guide/sharding/#getting-started} */
-const { ShardingManager } = require("discord.js");
-const { logger } = require("./utils/pino");
-
-process
-  .on("uncaughtException", (error) => {
-    logger.fatal(`${error}`);
-    process.exit(-1);
-  })
-  .on("unhandledRejection", (reason) => {
-    logger.fatal(`${reason}`);
-    process.exit(-1);
-  });
-
-const manager = new ShardingManager("src/client/bot.js", {
-  token: process.env.SECRET_TOKEN,
-  execArgv: ["--trace-warnings"],
-  shardArgs: ["--ansi", "--color"],
+const client = new SapphireClient({
+  intents: GatewayIntentBits.Guilds,
+  logger: {
+    level:
+      process.env.NODE_ENV === "development" ? LogLevel.Debug : LogLevel.Info,
+  },
 });
 
-manager.on("shardCreate", (shard) => {
-  logger.info(`Shard ${shard.id} launched.`);
-
-  shard.on("ready", () => {
-    logger.info(`Shard ${shard.id} online.`);
-  });
-});
-
-manager.spawn();
+client.login(process.env.SECRET_TOKEN);
