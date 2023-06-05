@@ -1,7 +1,7 @@
 "use strict";
 
 const { Command } = require("@sapphire/framework");
-const { isMessageInstance } = require("@sapphire/discord.js-utilities");
+const { EmbedBuilder } = require("discord.js");
 
 class Ping extends Command {
   constructor(context, options) {
@@ -17,20 +17,7 @@ class Ping extends Command {
   }
 
   async chatInputRun(interaction) {
-    const message = await interaction.reply({
-      content: `Pinging...`,
-      ephemeral: true,
-      fetchReply: true,
-    });
-
-    if (isMessageInstance(message)) {
-      const ws = Math.round(this.container.client.ws.ping);
-      const rtt = message.createdTimestamp - interaction.createdTimestamp;
-
-      return interaction.editReply(`Pong 🏓! (RTT: ${rtt}ms. WS: ${ws}ms.)`);
-    } else {
-      return interaction.editReply("Failed to retrieve ping.");
-    }
+    const message = new EmbedBuilder();
   }
 }
 
