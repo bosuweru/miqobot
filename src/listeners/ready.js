@@ -13,8 +13,7 @@ class Ready extends Listener {
   }
 
   run(client) {
-    const { username, discriminator } = client.user;
-    this.container.logger.info(`${username}#${discriminator} logged in.`);
+    this.container.logger.info(`${client.user.tag} logged in.`);
   }
 }
 
