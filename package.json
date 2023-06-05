@@ -14,7 +14,6 @@
   "version": "1.1.0",
   "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
   "dependencies": {
-    "@sapphire/discord.js-utilities": "^7.0.0",
     "@sapphire/framework": "^4.4.4",
     "@sapphire/plugin-logger": "^3.0.4",
     "discord.js": "^14.11.0",
