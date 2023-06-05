@@ -16,9 +16,32 @@ class Ping extends Command {
     );
   }
 
+  #message(ws, rtt) {
+    const color = 0x0000ff;
+    const title = ":ping_pong: Pong!";
+
+    if (!ws && !rtt) {
+      const description = "Pinging...";
+
+      return new EmbedBuilder()
+        .setColor(color)
+        .setTitle(title)
+        .setTimestamp()
+        .setDescription(description);
+    } else {
+      const description = `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`;
+
+      return new EmbedBuilder()
+        .setColor(color)
+        .setTitle(title)
+        .setTimestamp()
+        .setDescription(description);
+    }
+  }
+
   async chatInputRun(interaction) {
     const result = await interaction.reply({
-      content: "Pinging...",
+      embeds: [this.#message()],
       ephemeral: true,
       fetchReply: true,
     });
@@ -26,17 +49,7 @@ class Ping extends Command {
     const ws = interaction.client.ws.ping;
     const rtt = result.createdTimestamp - interaction.createdTimestamp;
 
-    await interaction.deleteReply();
-
-    const message = new EmbedBuilder()
-      .setColor(0x0000ff)
-      .setTitle(":ping_pong: Pong!")
-      .setTimestamp()
-      .setDescription(
-        `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`
-      );
-
-    await interaction.reply({ embeds: [message] });
+    await interaction.editReply({ embeds: [this.#message(ws, rtt)] });
   }
 }
 
