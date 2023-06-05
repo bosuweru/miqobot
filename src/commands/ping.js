@@ -17,7 +17,26 @@ class Ping extends Command {
   }
 
   async chatInputRun(interaction) {
-    const message = new EmbedBuilder();
+    const result = await interaction.reply({
+      content: "Pinging...",
+      ephemeral: true,
+      fetchReply: true,
+    });
+
+    const ws = interaction.client.ws.ping;
+    const rtt = result.createdTimestamp - interaction.createdTimestamp;
+
+    await interaction.deleteReply();
+
+    const message = new EmbedBuilder()
+      .setColor(0x0000ff)
+      .setTitle(":ping_pong: Pong!")
+      .setTimestamp()
+      .setDescription(
+        `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`
+      );
+
+    await interaction.reply({ embeds: [message] });
   }
 }
 
