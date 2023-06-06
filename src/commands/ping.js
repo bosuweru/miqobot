@@ -16,8 +16,8 @@ class Ping extends Command {
     return `${e} The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
   };
 
-  #embed = (desc) => {
-    return new EmbedBuilder().setDescription(`${desc}`);
+  #embed = (text) => {
+    return new EmbedBuilder().setDescription(text);
   };
 
   registerApplicationCommands(registry) {
