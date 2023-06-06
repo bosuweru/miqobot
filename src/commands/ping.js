@@ -8,6 +8,17 @@ class Ping extends Command {
     super(context, { ...options });
   }
 
+  #build = (int, res) => {
+    const ws = `${Math.round(int.client.ws.ping)}ms`;
+    const rtt = `${res.createdTimestamp - int.createdTimestamp}ms`;
+
+    return `The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
+  };
+
+  #embed = (description) => {
+    return new EmbedBuilder().setDescription(`${description}`);
+  };
+
   registerApplicationCommands(registry) {
     registry.registerChatInputCommand((builder) =>
       builder
@@ -16,40 +27,16 @@ class Ping extends Command {
     );
   }
 
-  #message(ws, rtt) {
-    const color = 0x0000ff;
-    const title = "/ping";
-
-    if (!ws && !rtt) {
-      const description = "Pinging...";
-
-      return new EmbedBuilder()
-        .setColor(color)
-        .setTitle(title)
-        .setTimestamp()
-        .setDescription(description);
-    } else {
-      const description = `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`;
-
-      return new EmbedBuilder()
-        .setColor(color)
-        .setTitle(title)
-        .setTimestamp()
-        .setDescription(description);
-    }
-  }
-
   async chatInputRun(interaction) {
     const result = await interaction.reply({
-      embeds: [this.#message()],
+      embeds: [this.#embed("Pinging...")],
       ephemeral: false,
       fetchReply: true,
     });
 
-    const ws = Math.round(this.container.client.ws.ping);
-    const rtt = result.createdTimestamp - interaction.createdTimestamp;
-
-    await interaction.editReply({ embeds: [this.#message(ws, rtt)] });
+    await interaction.editReply({
+      embeds: [this.#embed(this.#build(interaction, result))],
+    });
   }
 }
 
