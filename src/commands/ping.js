@@ -18,7 +18,7 @@ class Ping extends Command {
 
   #message(ws, rtt) {
     const color = 0x0000ff;
-    const title = ":ping_pong: Pong!";
+    const title = "/ping";
 
     if (!ws && !rtt) {
       const description = "Pinging...";
@@ -42,11 +42,11 @@ class Ping extends Command {
   async chatInputRun(interaction) {
     const result = await interaction.reply({
       embeds: [this.#message()],
-      ephemeral: true,
+      ephemeral: false,
       fetchReply: true,
     });
 
-    const ws = interaction.client.ws.ping;
+    const ws = Math.round(this.container.client.ws.ping);
     const rtt = result.createdTimestamp - interaction.createdTimestamp;
 
     await interaction.editReply({ embeds: [this.#message(ws, rtt)] });
