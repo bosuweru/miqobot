@@ -23,7 +23,7 @@ class Ping extends Command {
     registry.registerChatInputCommand((builder) =>
       builder
         .setName("ping")
-        .setDescription("Measures RTT and heartbeat socket.")
+        .setDescription("Measures RTT and websocket heartbeat.")
     );
   }
 
