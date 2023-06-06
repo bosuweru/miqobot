@@ -1,7 +1,7 @@
 "use strict";
 
 const { Command } = require("@sapphire/framework");
-const { EmbedBuilder } = require("discord.js");
+const { bold, EmbedBuilder } = require("discord.js");
 
 class Ping extends Command {
   constructor(context, options) {
@@ -9,14 +9,15 @@ class Ping extends Command {
   }
 
   #build = (int, res) => {
-    const ws = `${Math.round(int.client.ws.ping)}ms`;
-    const rtt = `${res.createdTimestamp - int.createdTimestamp}ms`;
+    const e = ":ping_pong:";
+    const ws = bold(`${Math.round(int.client.ws.ping)}ms`);
+    const rtt = bold(`${res.createdTimestamp - int.createdTimestamp}ms`);
 
-    return `The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
+    return `${e} The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
   };
 
-  #embed = (description) => {
-    return new EmbedBuilder().setDescription(`${description}`);
+  #embed = (desc) => {
+    return new EmbedBuilder().setDescription(`${desc}`);
   };
 
   registerApplicationCommands(registry) {
