@@ -38,9 +38,7 @@ class Ping extends Command {
     });
 
     const string = this.#print(interaction, result);
-    await interaction.editReply({
-      embeds: [this.#embed(string)],
-    });
+    await interaction.editReply({ embeds: [this.#embed(string)] });
 
     this.container.logger.debug(string);
   }
