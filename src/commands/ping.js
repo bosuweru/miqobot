@@ -9,15 +9,15 @@ class Ping extends Command {
   }
 
   #build = (int, res) => {
-    const e = ":ping_pong:";
     const ws = bold(`${Math.round(int.client.ws.ping)}ms`);
     const rtt = bold(`${res.createdTimestamp - int.createdTimestamp}ms`);
+    const emoji = ":ping_pong:";
 
-    return `${e} The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
+    return `${emoji} The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
   };
 
   #embed = (text) => {
-    return new EmbedBuilder().setDescription(text);
+    return new EmbedBuilder().setColor("Default").setDescription(text);
   };
 
   registerApplicationCommands(registry) {
@@ -29,9 +29,6 @@ class Ping extends Command {
   }
 
   async chatInputRun(interaction) {
-    const user = interaction.user.tag;
-    this.container.logger.debug(`Command[ping]: ${user} used /ping!`);
-
     try {
       const result = await interaction.reply({
         embeds: [this.#embed("Pinging...")],
@@ -41,6 +38,7 @@ class Ping extends Command {
 
       const description = this.#build(interaction, result);
       await interaction.editReply({ embeds: [this.#embed(description)] });
+      this.container.logger.debug(`Command[ping]: Executed successfully.`);
     } catch (error) {
       const result = error.message;
       this.container.logger.error(`Command[ping]: ${result}`);
