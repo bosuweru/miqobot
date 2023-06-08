@@ -13,6 +13,8 @@ class ChatInputCommandDenied extends Listener {
   }
 
   #build = (err) => {
+    // TODO: Reflect.get()?
+    // Check for precondition and return something.
     return `${err.message}.`;
   };
 
