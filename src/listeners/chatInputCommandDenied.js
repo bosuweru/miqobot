@@ -28,9 +28,9 @@ class ChatInputCommandDenied extends Listener {
       const result = this.#build(rejection);
 
       if (interaction.replied || interaction.deferred) {
-        await interaction.editReply({ embed: this.#embed(result) });
+        await interaction.editReply({ embeds: [this.#embed(result)] });
       } else {
-        await interaction.reply({ embed: this.#embed(result) });
+        await interaction.reply({ embeds: [this.#embed(result)] });
       }
     } catch (error) {
       const result = `Listener[chatInputCommandDenied]: ${error.message}`;
