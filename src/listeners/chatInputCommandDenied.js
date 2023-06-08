@@ -19,7 +19,7 @@ class ChatInputCommandDenied extends Listener {
   #embed = (text) => {
     return new EmbedBuilder()
       .setColor("Red")
-      .setTitle("Meow!")
+      .setTitle("Command Error!")
       .setDescription(text);
   };
 
