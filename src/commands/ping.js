@@ -41,8 +41,8 @@ class Ping extends Command {
       await interaction.editReply({ embeds: [this.#embed(description)] });
       this.container.logger.debug(`Command[ping]: Executed successfully.`);
     } catch (error) {
-      const result = error.message;
-      this.container.logger.error(`Command[ping]: ${result}`);
+      const result = `Command[ping]: ${error.message}`;
+      this.container.logger.error(result);
     }
   }
 }
