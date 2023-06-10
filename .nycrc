@@ -1,0 +1,9 @@
+{
+    "exclude": [
+        "src/test/**/*.js"
+    ],
+    "require": "mocha-suppress-logs",
+    "reporter": [
+        "html"
+    ]
+}
