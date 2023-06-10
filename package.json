@@ -9,9 +9,10 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
+    "test": "nyc mocha src/test/**/*.js",
     "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env"
   },
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
   "dependencies": {
     "@sapphire/framework": "^4.4.4",
@@ -22,9 +23,14 @@
     "dotenv-expand": "^10.0.0"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "mocha": "^10.2.0",
+    "mocha-suppress-logs": "^0.3.1",
+    "nyc": "^15.1.0",
     "prettier": "^2.8.8"
   }
 }
