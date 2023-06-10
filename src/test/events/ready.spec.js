@@ -27,9 +27,9 @@ describe("Ready Listener", function () {
   });
 
   describe("run()", function () {
-    it("...simulates running the listener", function () {
+    it("...simulates running the listener", async function () {
       expect(event.run).to.be.a("function");
-      event.run();
+      await event.run();
     });
   });
 });
