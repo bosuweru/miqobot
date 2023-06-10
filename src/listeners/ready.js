@@ -12,7 +12,7 @@ class Ready extends Listener {
     });
   }
 
-  run(client) {
+  async run(client) {
     /* istanbul ignore if  */
     if (process.env.NODE_ENV) {
       const user = client.user.tag;
