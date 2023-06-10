@@ -1,11 +1,12 @@
 "use strict";
 
+const { Time } = require("@sapphire/time-utilities");
 const { Command } = require("@sapphire/framework");
 const { bold, EmbedBuilder } = require("discord.js");
 
 class Ping extends Command {
-  constructor(context, options) {
-    super(context, { ...options });
+  constructor(context) {
+    super(context, { cooldownDelay: Time.Second * 10 });
   }
 
   #build = (int, res) => {
@@ -40,8 +41,8 @@ class Ping extends Command {
       await interaction.editReply({ embeds: [this.#embed(description)] });
       this.container.logger.debug(`Command[ping]: Executed successfully.`);
     } catch (error) {
-      const result = error.message;
-      this.container.logger.error(`Command[ping]: ${result}`);
+      const result = `Command[ping]: ${error.message}`;
+      this.container.logger.error(result);
     }
   }
 }
