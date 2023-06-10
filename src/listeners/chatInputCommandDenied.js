@@ -16,16 +16,17 @@ class ChatInputCommandDenied extends Listener {
   #build = (pre) => {
     if (pre.identifier === "preconditionCooldown") {
       const val = Math.floor(pre.context.remaining / Time.Second);
-      const sec = val > 1 ? `${val} seconds` : `${val} second`;
+      const sec = () => {
+        if (val > 1) return `${val} seconds`;
+        else if (val == 1) return `${val} second`;
+        else return `${pre.context.remaining / Time.Second} seconds`;
+      };
       const obj = {
         title: "Slow down!",
-        description: `You will be able to use this slash command again in ${sec}.`,
+        description: `You will be able to use this command again in ${sec()}.`,
       };
 
       return obj;
-    } else {
-      // To be implemented later.
-      return `${pre.message}`;
     }
   };
 
