@@ -28,6 +28,7 @@ describe("Ready Listener", function () {
 
   describe("run()", function () {
     it("...simulates running the listener", function () {
+      expect(event.run).to.be.a("function");
       event.run();
     });
   });
