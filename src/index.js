@@ -20,7 +20,7 @@ class Miqobot {
   connect() {
     this.client.login(process.env.SECRET_TOKEN).catch((error) => {
       /* istanbul ignore if  */
-      if (process.env.SECRET_TOKEN) {
+      if (process.env.NODE_ENV) {
         const result = error.message;
         container.logger.error(`Client[miqobot] ${result}`);
       }
@@ -32,7 +32,7 @@ class Miqobot {
       this.client.destroy();
     } catch (error) {
       /* istanbul ignore if  */
-      if (process.env.SECRET_TOKEN) {
+      if (process.env.NODE_ENV) {
         const result = error.message;
         container.logger.error(`Client[miqobot] ${result}`);
       }
