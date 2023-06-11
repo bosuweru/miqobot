@@ -66,7 +66,7 @@ describe("Client Test Suite", function () {
     });
   });
 
-  describe("setupCollection Method", function () {
+  describe("SetupCollection Method", function () {
     it("...verify collection initialization", function () {
       expect(Array.isArray(collection)).to.be.true;
       expect(Miqobot.setupCollection).to.be.a("function");
@@ -81,7 +81,7 @@ describe("Client Test Suite", function () {
     });
   });
 
-  describe("setupEvent Method", function () {
+  describe("SetupEvent Method", function () {
     it("...verify event initialization", function () {
       expect(Miqobot.setupEvent).to.be.a("function");
       expect(spySetupEvent.calledOnce).to.be.true;
