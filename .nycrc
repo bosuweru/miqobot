@@ -4,6 +4,6 @@
     ],
     "require": "mocha-suppress-logs",
     "reporter": [
-        "html"
+        "lcov"
     ]
 }
