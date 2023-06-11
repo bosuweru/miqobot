@@ -20,7 +20,7 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "test": "nyc mocha",
+    "test": "cross-env NODE_ENV=staging nyc mocha",
     "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env"
   },
   "version": "2.0.0",
@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.7",
+    "cross-env": "^7.0.3",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-mocha": "^10.1.0",
