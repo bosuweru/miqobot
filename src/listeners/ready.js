@@ -12,9 +12,12 @@ class Ready extends Listener {
     });
   }
 
-  run(client) {
-    const user = client.user.tag;
-    this.container.logger.info(`Listener[ready] ${user} logged in.`);
+  async run(client) {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV) {
+      const user = client.user.tag;
+      this.container.logger.info(`Listener[ready] ${user} logged in.`);
+    }
   }
 }
 

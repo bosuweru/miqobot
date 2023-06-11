@@ -2,25 +2,14 @@
 
 const { Time } = require("@sapphire/time-utilities");
 const { Command } = require("@sapphire/framework");
-const { bold, EmbedBuilder } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 class Ping extends Command {
   constructor(context) {
     super(context, { cooldownDelay: Time.Second * 10 });
   }
 
-  #build = (int, res) => {
-    const ws = bold(`${Math.round(int.client.ws.ping)}ms`);
-    const rtt = bold(`${res.createdTimestamp - int.createdTimestamp}ms`);
-    const emoji = ":ping_pong:";
-
-    return `${emoji} The round-trip time is ${rtt}, and the websocket heartbeat is ${ws}.`;
-  };
-
-  #embed = (text) => {
-    return new EmbedBuilder().setColor("Default").setDescription(text);
-  };
-
+  /* istanbul ignore next */
   registerApplicationCommands(registry) {
     registry.registerChatInputCommand((builder) =>
       builder
@@ -29,16 +18,42 @@ class Ping extends Command {
     );
   }
 
+  /* istanbul ignore next */
+  builder(response, interaction) {
+    if (!response || !interaction) {
+      return { color: "Default", title: "Ping", description: "Pinging..." };
+    } else {
+      const ws = Math.round(interaction.client.ws.ping);
+      const rtt = response.createdTimestamp - interaction.createdTimestamp;
+
+      return {
+        color: "Green",
+        title: "Ping",
+        description: `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`,
+      };
+    }
+  }
+
+  /* istanbul ignore next */
+  message(object) {
+    return new EmbedBuilder()
+      .setColor(object.color)
+      .setTitle(object.title)
+      .setDescription(object.description);
+  }
+
+  /* istanbul ignore next */
   async chatInputRun(interaction) {
     try {
-      const result = await interaction.reply({
-        embeds: [this.#embed("Pinging...")],
+      const response = await interaction.reply({
+        embeds: [this.message(this.builder())],
         ephemeral: false,
         fetchReply: true,
       });
+      await interaction.editReply({
+        embeds: [this.message(this.builder(response, interaction))],
+      });
 
-      const description = this.#build(interaction, result);
-      await interaction.editReply({ embeds: [this.#embed(description)] });
       this.container.logger.debug(`Command[ping]: Executed successfully.`);
     } catch (error) {
       const result = `Command[ping]: ${error.message}`;

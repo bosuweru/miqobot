@@ -1,3 +1,5 @@
 logs
 private
+coverage
+.nyc_output
 node_modules
