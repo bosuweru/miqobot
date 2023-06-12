@@ -36,6 +36,21 @@ class Crystal {
     }
   }
 
+  setupCommand() {
+    const commandsPath = path.join(__dirname, "commands");
+    const commandFiles = fs
+      .readdirSync(commandsPath)
+      .filter((file) => file.endsWith(".js"));
+
+    for (const file of commandFiles) {
+      const commandPath = path.join(commandsPath, file);
+      const { Command } = require(commandPath);
+
+      const command = new Command();
+      this.client.commands.set(command.data.name, command);
+    }
+  }
+
   setupCollection() {
     this.client.events = new Collection();
     this.client.commands = new Collection();
