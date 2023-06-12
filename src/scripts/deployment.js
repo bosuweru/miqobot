@@ -26,13 +26,16 @@ class Deploy {
   }
 
   save() {
-    const rest = new REST().setToken(process.env.SECRET_TOKEN);
+    /* istanbul ignore next  */
+    if (process.env.NODE_ENV !== "staging") {
+      const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
-    if (process.env.NODE_ENV === "development")
-      rest.put(Routes.applicationGuildCommands("", ""), {
-        body: this.commands,
-      });
-    else rest.put(Routes.applicationCommands(""), { body: this.commands });
+      if (process.env.NODE_ENV === "development")
+        rest.put(Routes.applicationGuildCommands("", ""), {
+          body: this.commands,
+        });
+      else rest.put(Routes.applicationCommands(""), { body: this.commands });
+    }
   }
 }
 
