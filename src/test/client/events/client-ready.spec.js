@@ -13,11 +13,11 @@ describe("ClientReady Event Test Suite", function () {
   let result;
   let spyExecute;
 
-  before(function () {
+  before(async function () {
     ClientReady = new Event();
 
     spyExecute = spy(ClientReady, "execute");
-    result = ClientReady.execute();
+    result = await ClientReady.execute();
   });
 
   describe("Constructor Method", function () {
