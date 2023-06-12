@@ -8,7 +8,7 @@ class Event {
     this.once = false;
   }
 
-  execute() {
+  async execute() {
     return null;
   }
 }
