@@ -5,6 +5,7 @@ const Events = require("discord.js").Events;
 const Collection = require("discord.js").Collection;
 const IntentsBitField = require("discord.js").IntentsBitField;
 const GatewayIntentBits = require("discord.js").GatewayIntentBits;
+const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
 
 const { spy } = require("sinon");
 const { expect } = require("chai");
@@ -27,7 +28,10 @@ describe("Client Test Suite", function () {
   let clientReady;
   let interactionCreate;
 
+  let ping;
+
   let spySetupEvent;
+  let spySetupCommand;
   let spySetupCollection;
 
   before(function () {
@@ -51,6 +55,10 @@ describe("Client Test Suite", function () {
     Miqobot.setupEvent();
     clientReady = events.get(Events.ClientReady);
     interactionCreate = events.get(Events.InteractionCreate);
+
+    spySetupCommand = spy(Miqobot, "setupCommand");
+    Miqobot.setupCommand();
+    ping = commands.get("ping");
   });
 
   describe("Constructor Method", function () {
@@ -97,6 +105,23 @@ describe("Client Test Suite", function () {
       expect(interactionCreate.name).to.equal(Events.InteractionCreate);
       expect(interactionCreate.once).to.be.false;
       expect(interactionCreate.execute).to.be.a("function");
+    });
+  });
+
+  describe("SetupCommand Method", function () {
+    it("...verify command initialization", function () {
+      expect(Miqobot.setupCommand).to.be.a("function");
+      expect(spySetupCommand.calledOnce).to.be.true;
+    });
+
+    it("...validate command initialization", function () {
+      expect(ping).to.be.instanceOf(Object);
+      expect(ping.data).to.be.instanceOf(SlashCommandBuilder);
+      expect(ping.data.name).to.equal("ping");
+      // eslint-disable-next-line prettier/prettier
+      expect(ping.data.description).to.equal("Measures RTT and websocket heartbeat.");
+      expect(ping.cooldown).to.equal(3);
+      expect(ping.execute).to.be.a("function");
     });
   });
 });
