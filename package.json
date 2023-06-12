@@ -21,7 +21,9 @@
   "private": true,
   "scripts": {
     "test": "cross-env NODE_ENV=staging nyc mocha",
-    "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env"
+    "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env",
+    "deploy:production": "cross-env NODE_ENV=production node ./src/scripts/deployment.js",
+    "deploy:development": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env"
   },
   "version": "2.0.0",
   "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
