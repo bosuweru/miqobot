@@ -13,11 +13,11 @@ describe("InteractionCreate Event Test Suite", function () {
   let result;
   let spyExecute;
 
-  before(function () {
+  before(async function () {
     InteractionCreate = new Event();
 
     spyExecute = spy(InteractionCreate, "execute");
-    result = InteractionCreate.execute();
+    result = await InteractionCreate.execute();
   });
 
   describe("Constructor Method", function () {
