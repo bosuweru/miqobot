@@ -26,7 +26,7 @@ class Deploy {
   }
 
   save() {
-    /* istanbul ignore next  */
+    /* istanbul ignore if  */
     if (process.env.NODE_ENV !== "staging") {
       const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
@@ -35,6 +35,8 @@ class Deploy {
           body: this.commands,
         });
       else rest.put(Routes.applicationCommands(""), { body: this.commands });
+    } else {
+      return null;
     }
   }
 }
