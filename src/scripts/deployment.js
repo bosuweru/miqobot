@@ -30,11 +30,20 @@ class Deploy {
     if (process.env.NODE_ENV !== "staging") {
       const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
-      if (process.env.NODE_ENV === "development")
-        rest.put(Routes.applicationGuildCommands("", ""), {
+      if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line prettier/prettier
+        const { client, server } = require("../../private/configuration/miqobot.json");
+
+        rest.put(Routes.applicationGuildCommands(client.id, server.id), {
           body: this.commands,
         });
-      else rest.put(Routes.applicationCommands(""), { body: this.commands });
+      } else {
+        const client = { id: process.env.APPLICATION_ID };
+
+        rest.put(Routes.applicationCommands(client.id), {
+          body: this.commands,
+        });
+      }
     } else {
       return null;
     }
