@@ -32,7 +32,8 @@ class Deploy {
 
       if (process.env.NODE_ENV === "development") {
         // eslint-disable-next-line prettier/prettier
-        const { client, server } = require("../../private/configuration/miqobot.json");
+        const { miqobot } = require("../../private/configuration/miqobot.json");
+        const { client, server } = miqobot;
 
         rest.put(Routes.applicationGuildCommands(client.id, server.id), {
           body: this.commands,
