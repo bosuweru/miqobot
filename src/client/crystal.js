@@ -13,6 +13,24 @@ class Crystal {
     this.collection = [];
   }
 
+  connect() {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV !== "staging") {
+      this.client.login(process.env.SECRET_TOKEN);
+    } else {
+      return null;
+    }
+  }
+
+  disconnect() {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV !== "staging") {
+      this.client.destroy();
+    } else {
+      return null;
+    }
+  }
+
   setupEvent() {
     const eventsPath = path.join(__dirname, "events");
     const eventFiles = fs
@@ -63,3 +81,14 @@ class Crystal {
 }
 
 module.exports = { Crystal };
+
+/* istanbul ignore next  */
+if (process.env.NODE_ENV !== "staging") {
+  const Miqobot = new Crystal();
+
+  Miqobot.setupCollection();
+  Miqobot.setupCommand();
+  Miqobot.setupEvent();
+
+  Miqobot.connect();
+}
