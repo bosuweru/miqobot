@@ -26,7 +26,10 @@ class Crystals {
 
   setupListener() {
     /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging") this.manager.on();
+    if (process.env.NODE_ENV !== "staging")
+      this.manager.on("shardCreate", (shard) => {
+        console.log(`Shard ${shard.id} has been created.`);
+      });
 
     return undefined;
   }
