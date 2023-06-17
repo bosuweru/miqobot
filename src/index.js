@@ -1,49 +1,47 @@
 "use strict";
 
-require("@sapphire/plugin-logger/register");
-const { GatewayIntentBits } = require("discord.js");
-const { LogLevel, container, SapphireClient } = require("@sapphire/framework");
+const path = require("node:path");
 
-class Miqobot {
-  constructor() {
-    this.client = new SapphireClient({
-      intents: [GatewayIntentBits.Guilds],
-      logger: {
-        level:
-          process.env.NODE_ENV === "production"
-            ? /* istanbul ignore next */ LogLevel.Info
-            : LogLevel.Debug,
-      },
+const ShardingManager = require("discord.js").ShardingManager;
+
+class Crystals {
+  constructor(Crystal) {
+    this.manager = new ShardingManager(Crystal, {
+      mode: "process",
+      token: process.env.SECRET_TOKEN,
+      respawn: true,
+      execArgv: ["--trace-warnings"],
+      shardArgs: ["--ansi", "--color"],
+      shardList: "auto",
+      totalShards: "auto",
     });
   }
 
-  connect() {
-    this.client.login(process.env.SECRET_TOKEN).catch((error) => {
-      /* istanbul ignore if  */
-      if (process.env.NODE_ENV) {
-        const result = error.message;
-        container.logger.error(`Client[miqobot] ${result}`);
-      }
-    });
+  spawn() {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV !== "staging") this.manager.spawn();
+
+    return undefined;
   }
 
-  disconnect() {
-    try {
-      this.client.destroy();
-    } catch (error) {
-      /* istanbul ignore if  */
-      if (process.env.NODE_ENV) {
-        const result = error.message;
-        container.logger.error(`Client[miqobot] ${result}`);
-      }
-    }
+  setupListener() {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV !== "staging")
+      this.manager.on("shardCreate", (shard) => {
+        console.log(`Shard ${shard.id} has been created.`);
+      });
+
+    return undefined;
   }
 }
 
-module.exports = { Miqobot };
+module.exports = { Crystals };
 
-/* istanbul ignore if  */
-if (process.env.NODE_ENV) {
-  const miqobot = new Miqobot();
-  miqobot.connect();
+/* istanbul ignore next  */
+if (process.env.NODE_ENV !== "staging") {
+  const Client = path.join(__dirname, "client/crystal.js");
+  const Shards = new Crystals(Client);
+
+  Shards.setupListener();
+  Shards.spawn();
 }
