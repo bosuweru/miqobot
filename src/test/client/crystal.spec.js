@@ -30,9 +30,14 @@ describe("Client Test Suite", function () {
 
   let ping;
 
+  let spyConnect;
+  let spyDisconnect;
   let spySetupEvent;
   let spySetupCommand;
   let spySetupCollection;
+
+  let connection;
+  let disconnection;
 
   before(function () {
     Miqobot = new Crystal();
@@ -59,6 +64,12 @@ describe("Client Test Suite", function () {
     spySetupCommand = spy(Miqobot, "setupCommand");
     Miqobot.setupCommand();
     ping = commands.get("ping");
+
+    spyConnect = spy(Miqobot, "connect");
+    spyDisconnect = spy(Miqobot, "disconnect");
+
+    connection = Miqobot.connect();
+    disconnection = Miqobot.disconnect();
   });
 
   describe("Constructor Method", function () {
@@ -122,6 +133,28 @@ describe("Client Test Suite", function () {
       expect(ping.data.description).to.equal("Measures RTT and websocket heartbeat.");
       expect(ping.cooldown).to.equal(3);
       expect(ping.execute).to.be.a("function");
+    });
+  });
+
+  describe("Connect Method", function () {
+    it("...verify connection functionality", function () {
+      expect(Miqobot.disconnect).to.be.a("function");
+      expect(spyConnect.calledOnce).to.be.true;
+    });
+
+    it("...validate connection functionality", function () {
+      expect(connection).to.be.null;
+    });
+  });
+
+  describe("Disconnect Method", function () {
+    it("...verify disconnection functionality", function () {
+      expect(Miqobot.connect).to.be.a("function");
+      expect(spyDisconnect.calledOnce).to.be.true;
+    });
+
+    it("...validate disconnection functionality", function () {
+      expect(disconnection).to.be.null;
     });
   });
 });
