@@ -26,7 +26,7 @@
     "deploy:development": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env"
   },
   "version": "2.0.0",
-  "description": "A multipurpose and open-source Discord bot that assists with FINAL FANTASY XIV.",
+  "description": "A multipurpose and open-source Discord bot that interacts with XIVAPI.",
   "eslintConfig": {
     "env": {
       "node": true,
