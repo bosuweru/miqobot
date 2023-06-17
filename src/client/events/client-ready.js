@@ -8,8 +8,13 @@ class Event {
     this.once = true;
   }
 
-  async execute() {
-    return null;
+  async execute(client) {
+    /* istanbul ignore if  */
+    if (process.env.NODE_ENV !== "staging") {
+      console.log(`${client.user.tag} has logged in.`);
+    } else {
+      return null;
+    }
   }
 }
 
