@@ -1,9 +1,10 @@
 "use strict";
 
 const Time = require("@sapphire/duration").Time;
+const EmbedBuilder = require("discord.js").EmbedBuilder;
 const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
 
-const EmbedBuilder = require("discord.js").EmbedBuilder;
+const { logger } = require("../../utilities/winston");
 
 class Command {
   constructor() {
@@ -41,7 +42,7 @@ class Command {
           ],
         });
       } catch (error) {
-        console.error(error);
+        logger.error(`${error.message}`);
       }
     } else {
       return null;
