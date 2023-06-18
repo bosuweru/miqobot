@@ -5,6 +5,8 @@ const Events = require("discord.js").Events;
 const Collection = require("discord.js").Collection;
 const EmbedBuilder = require("discord.js").EmbedBuilder;
 
+const { logger } = require("../../utilities/winston");
+
 class Event {
   constructor() {
     this.name = Events.InteractionCreate;
@@ -50,7 +52,7 @@ class Event {
       try {
         await command.execute(interaction);
       } catch (error) {
-        console.error(error);
+        logger.error(`${error.message}`);
       }
     } else {
       return null;
