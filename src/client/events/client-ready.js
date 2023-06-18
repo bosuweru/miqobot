@@ -2,6 +2,8 @@
 
 const Events = require("discord.js").Events;
 
+const { logger } = require("../../utilities/winston");
+
 class Event {
   constructor() {
     this.name = Events.ClientReady;
@@ -11,7 +13,7 @@ class Event {
   async execute(client) {
     /* istanbul ignore if  */
     if (process.env.NODE_ENV !== "staging") {
-      console.log(`${client.user.tag} has logged in.`);
+      logger.info(`${client.user.tag} has logged in.`);
     } else {
       return null;
     }
