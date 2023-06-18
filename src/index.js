@@ -1,8 +1,9 @@
 "use strict";
 
 const path = require("node:path");
-
 const ShardingManager = require("discord.js").ShardingManager;
+
+const { logger } = require("./utilities/winston");
 
 class Crystals {
   constructor(Crystal) {
@@ -28,7 +29,7 @@ class Crystals {
     /* istanbul ignore if  */
     if (process.env.NODE_ENV !== "staging")
       this.manager.on("shardCreate", (shard) => {
-        console.log(`Shard ${shard.id} has been created.`);
+        logger.info(`Shard ${shard.id} has been created.`);
       });
 
     return undefined;
