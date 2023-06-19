@@ -2,20 +2,18 @@
 
 const Events = require("discord.js").Events;
 
-class Event {
-  constructor() {
-    this.name = Events.ClientReady;
-    this.once = true;
-  }
+const { logger } = require("../../utilities/winston");
 
-  async execute(client) {
-    /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging") {
-      console.log(`${client.user.tag} has logged in.`);
-    } else {
-      return null;
+module.exports = {
+  name: Events.ClientReady,
+  once: true,
+  execute(client) {
+    try {
+      const { user } = client;
+      logger.info(`Event[${this.name}]: ${user.tag} has been logged in.`);
+    } catch (error) {
+      const exception = `${error.message}`;
+      logger.error(`Event[${this.name}]: ${exception}`);
     }
-  }
-}
-
-module.exports = { Event };
+  },
+};

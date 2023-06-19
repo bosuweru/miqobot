@@ -4,44 +4,26 @@ const path = require("node:path");
 
 const ShardingManager = require("discord.js").ShardingManager;
 
-class Crystals {
-  constructor(Crystal) {
-    this.manager = new ShardingManager(Crystal, {
-      mode: "process",
-      token: process.env.SECRET_TOKEN,
-      respawn: true,
-      execArgv: ["--trace-warnings"],
-      shardArgs: ["--ansi", "--color"],
-      shardList: "auto",
-      totalShards: "auto",
-    });
-  }
+const { logger } = require("./utilities/winston");
 
-  spawn() {
-    /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging") this.manager.spawn();
+const manager = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
+  mode: "process",
+  token: process.env.SECRET_TOKEN,
+  respawn:
+    process.env.NODE_ENV === "production"
+      ? /* istanbul ignore next */ true
+      : false,
+  execArgv: ["--trace-warnings"],
+  shardArgs: ["--ansi", "--color"],
+  shardList: "auto",
+  totalShards: "auto",
+});
 
-    return undefined;
-  }
+manager.on("shardCreate", (shard) => {
+  logger.info(`Shard[${shard.id}]: The shard has been created.`);
+});
 
-  setupListener() {
-    /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging")
-      this.manager.on("shardCreate", (shard) => {
-        console.log(`Shard ${shard.id} has been created.`);
-      });
+/* istanbul ignore if */
+if (process.env.NODE_ENV !== "staging") manager.spawn();
 
-    return undefined;
-  }
-}
-
-module.exports = { Crystals };
-
-/* istanbul ignore next  */
-if (process.env.NODE_ENV !== "staging") {
-  const Client = path.join(__dirname, "client/crystal.js");
-  const Shards = new Crystals(Client);
-
-  Shards.setupListener();
-  Shards.spawn();
-}
+module.exports = { manager };
