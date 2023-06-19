@@ -4,12 +4,15 @@
 [discord-url]: https://discord.gg/faYesGbdU8
 [license-img]: https://img.shields.io/github/license/bosuweru/miqobot?logo=gnu
 [license-url]: LICENSE
+[version-img]: https://img.shields.io/github/package-json/v/bosuweru/miqobot/main?logo=npm&label=version
+[version-url]: package.json
 [prettier-img]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?logo=prettier
 [prettier-url]: https://github.com/prettier/prettier
 
 [ ![codecov-img]][codecov-url]
-[ ![license-img]][license-url]
 [ ![prettier-img]][prettier-url]
+[ ![license-img]][license-url]
+[ ![version-img]][version-url]
 [ ![discord-img]][discord-url]
 
 # Miqobot

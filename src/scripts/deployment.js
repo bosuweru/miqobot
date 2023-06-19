@@ -6,58 +6,55 @@ const path = require("node:path");
 const REST = require("discord.js").REST;
 const Routes = require("discord.js").Routes;
 
-class Deploy {
-  constructor(directory) {
-    this.commands = [];
-    this.commandsPath = directory;
-    this.commandFiles = fs
-      .readdirSync(this.commandsPath)
-      .filter((file) => file.endsWith(".js"));
-  }
+const { logger } = require("../utilities/winston");
 
-  load() {
-    for (const file of this.commandFiles) {
-      const commandPath = path.join(this.commandsPath, file);
-      const { Command } = require(commandPath);
+const commands = [];
+const commandsPath = path.join(__dirname, "../client/commands");
+const commandFiles = fs
+  .readdirSync(commandsPath)
+  .filter((file) => file.endsWith(".js"));
 
-      const command = new Command();
-      this.commands.push(command.data.toJSON());
-    }
-  }
+for (const file of commandFiles) {
+  const commandPath = path.join(commandsPath, file);
+  const command = require(commandPath);
 
-  save() {
-    /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging") {
-      const rest = new REST().setToken(process.env.SECRET_TOKEN);
-
-      if (process.env.NODE_ENV === "development") {
-        // eslint-disable-next-line prettier/prettier
-        const { miqobot } = require("../../private/configuration/miqobot.json");
-        const { client, server } = miqobot;
-
-        rest.put(Routes.applicationGuildCommands(client.id, server.id), {
-          body: this.commands,
-        });
-      } else {
-        const client = { id: process.env.APPLICATION_ID };
-
-        rest.put(Routes.applicationCommands(client.id), {
-          body: this.commands,
-        });
-      }
-    } else {
-      return null;
-    }
-  }
+  commands.push(command.data.toJSON());
 }
 
-module.exports = { Deploy };
-
-/* istanbul ignore next  */
+/* istanbul ignore if */
 if (process.env.NODE_ENV !== "staging") {
-  const folder = path.join(__dirname, "../client/commands");
-  const script = new Deploy(folder);
+  const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
-  script.load();
-  script.save();
+  if (process.env.NODE_ENV === "development") {
+    const { miqobot } = require("../../private/configuration/miqobot.json");
+    const { client, server } = miqobot;
+
+    rest
+      .put(Routes.applicationGuildCommands(client.id, server.id), {
+        body: commands,
+      })
+      .then((data) => {
+        const result = `${data.length} guild application (/) commands`;
+        logger.info(`Script[deployment]: Refreshed ${result}.`);
+      })
+      .catch((error) => {
+        const exception = `${error.message}`;
+        logger.error(`Script[deployment]: ${exception}.`);
+      });
+  } else {
+    const client = { id: process.env.APPLICATION_ID };
+
+    rest
+      .put(Routes.applicationCommands(client.id), {
+        body: commands,
+      })
+      .then((data) => {
+        const result = `${data.length} application (/) commands`;
+        logger.info(`Script[deployment]: Refreshed ${result}.`);
+      })
+      .catch((error) => {
+        const exception = `${error.message}`;
+        logger.error(`Script[deployment]: ${exception}.`);
+      });
+  }
 }
