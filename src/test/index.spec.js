@@ -2,6 +2,7 @@
 
 const expect = require("chai").expect;
 
+require("../scripts/deployment");
 const { manager } = require("../index");
 
 describe("src/index.js", function () {
