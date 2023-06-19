@@ -4,7 +4,7 @@ const expect = require("chai").expect;
 
 const { manager } = require("../index");
 
-describe("index.js", function () {
+describe("src/index.js", function () {
   describe("ShardingManager", function () {
     it("...is of type null for token", function () {
       expect(manager.token).to.be.null;
@@ -23,8 +23,8 @@ describe("index.js", function () {
     });
   });
 
-  describe("ShardingManager Events", function () {
-    it("...emits 'shardCreate'", function () {
+  describe("Event[ShardCreate]", function () {
+    it("...returns undefined", function () {
       const boolean = manager.emit("shardCreate", { id: 0 });
       expect(boolean).to.be.true;
     });
