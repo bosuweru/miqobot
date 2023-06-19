@@ -35,6 +35,7 @@ module.exports = {
       if (timestamps.has(interaction.user.id)) {
         const milliseconds = timestamps.get(interaction.user.id) + cooldown;
 
+        /* istanbul ignore else */
         if (utc < milliseconds) {
           const remaining = Math.round(milliseconds / Time.Second);
 
