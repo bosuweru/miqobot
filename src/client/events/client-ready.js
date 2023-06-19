@@ -8,6 +8,12 @@ module.exports = {
   name: Events.ClientReady,
   once: true,
   execute(client) {
-    logger.info(`Event[${this.name}]: ${client.user.tag} has been logged in.`);
+    try {
+      const { user } = client;
+      logger.info(`Event[${this.name}]: ${user.tag} has been logged in.`);
+    } catch (error) {
+      const exception = `${error.message}`;
+      logger.error(`Event[${this.name}]: ${exception}`);
+    }
   },
 };
