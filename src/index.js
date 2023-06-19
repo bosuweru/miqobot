@@ -9,7 +9,10 @@ const { logger } = require("./utilities/winston");
 const manager = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
   mode: "process",
   token: process.env.SECRET_TOKEN,
-  respawn: process.env.NODE_ENV === "production" ? true : false,
+  respawn:
+    process.env.NODE_ENV === "production"
+      ? /* istanbul ignore next */ true
+      : false,
   execArgv: ["--trace-warnings"],
   shardArgs: ["--ansi", "--color"],
   shardList: "auto",
@@ -20,4 +23,7 @@ manager.on("shardCreate", (shard) => {
   logger.info(`Shard[${shard.id}]: The shard has been created.`);
 });
 
+/* istanbul ignore if */
 if (process.env.NODE_ENV !== "staging") manager.spawn();
+
+module.exports = { manager };
