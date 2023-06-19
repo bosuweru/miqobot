@@ -21,6 +21,7 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
+/* istanbul ignore if */
 if (process.env.NODE_ENV !== "staging") {
   const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
