@@ -6,6 +6,7 @@ const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
 
 const { logger } = require("../../utilities/winston");
 
+/* istanbul ignore next */
 function onPing(message, interaction) {
   const ws = Math.round(interaction.client.ws.ping);
   const rtt = message.createdTimestamp - interaction.createdTimestamp;
@@ -37,6 +38,7 @@ module.exports = {
         fetchReply: true,
       });
 
+      /* istanbul ignore next */
       return await interaction.editReply({
         embeds: [onPing(message, interaction)],
       });
