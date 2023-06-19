@@ -41,6 +41,7 @@ module.exports = {
           return await interaction.reply({
             embeds: [onCooldown(command, remaining)],
             ephemeral: true,
+            fetchReply: false,
           });
         }
       }
@@ -50,7 +51,8 @@ module.exports = {
 
       return await command.execute(interaction);
     } catch (error) {
-      logger.error(`[${this.name}]: ${error.message}`);
+      const exception = `${error.message}`;
+      logger.error(`Event[${this.name}]: ${exception}`);
     }
   },
 };
