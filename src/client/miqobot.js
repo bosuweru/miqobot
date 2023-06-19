@@ -38,6 +38,7 @@ for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
   const command = require(filePath);
 
+  /* istanbul ignore else */
   if ("data" in command && "execute" in command) {
     client.commands.set(command.data.name, command);
   } else {
@@ -46,4 +47,7 @@ for (const file of commandFiles) {
   }
 }
 
+/* istanbul ignore if */
 if (process.env.NODE_ENV !== "staging") client.login(process.env.SECRET_TOKEN);
+
+module.exports = { client };
