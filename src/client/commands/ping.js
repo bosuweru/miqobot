@@ -6,48 +6,43 @@ const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
 
 const { logger } = require("../../utilities/winston");
 
-class Command {
-  constructor() {
-    this.data = new SlashCommandBuilder()
-      .setName("ping")
-      .setDescription("Measures RTT and websocket heartbeat.");
-    this.cooldown = 3000 / Time.Second;
-  }
+function onPing(message, interaction) {
+  const ws = Math.round(interaction.client.ws.ping);
+  const rtt = message.createdTimestamp - interaction.createdTimestamp;
+  const description = `The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`;
 
-  async execute(interaction) {
-    /* istanbul ignore if  */
-    if (process.env.NODE_ENV !== "staging") {
-      try {
-        const response = await interaction.reply({
-          embeds: [
-            new EmbedBuilder()
-              .setColor("Default")
-              .setTitle("Ping")
-              .setDescription("Pinging..."),
-          ],
-          ephemeral: false,
-          fetchReply: true,
-        });
-
-        const ws = Math.round(interaction.client.ws.ping);
-        const rtt = response.createdTimestamp - interaction.createdTimestamp;
-
-        await interaction.editReply({
-          embeds: [
-            new EmbedBuilder()
-              .setColor("Green")
-              .setTitle("Ping")
-              // eslint-disable-next-line prettier/prettier
-            .setDescription(`The round-trip time is ${rtt}ms, and the websocket heartbeat is ${ws}ms.`),
-          ],
-        });
-      } catch (error) {
-        logger.error(`${error.message}`);
-      }
-    } else {
-      return null;
-    }
-  }
+  return new EmbedBuilder()
+    .setColor("Green")
+    .setTitle("Ping")
+    .setDescription(description);
 }
 
-module.exports = { Command };
+function onWait() {
+  return new EmbedBuilder()
+    .setColor("Default")
+    .setTitle("Ping")
+    .setDescription("Pinging...");
+}
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("Measures RTT and websocket heartbeat."),
+  cooldown: 3000 / Time.Second,
+  async execute(interaction) {
+    try {
+      const message = await interaction.reply({
+        embeds: [onWait()],
+        ephemeral: false,
+        fetchReply: true,
+      });
+
+      return await interaction.editReply({
+        embeds: [onPing(message, interaction)],
+      });
+    } catch (error) {
+      const exception = `${error.message}`;
+      logger.error(`Command[${this.name}]: ${exception}`);
+    }
+  },
+};
