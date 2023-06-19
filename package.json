@@ -1,7 +1,7 @@
 {
   "nyc": {
     "include": "**",
-    "exclude": "**/*.spec.js",
+    "exclude": ["**/__mocks__/", "**/*.spec.js"],
     "reporter": [
       "lcov",
       "text"
