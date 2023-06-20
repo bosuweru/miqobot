@@ -44,7 +44,7 @@ module.exports = {
       });
     } catch (error) {
       const exception = `${error.message}`;
-      logger.error(`Command[${this.name}]: ${exception}`);
+      logger.error(`Command[${this.data.name}]: ${exception}`);
     }
   },
 };
