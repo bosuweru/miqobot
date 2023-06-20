@@ -12,18 +12,18 @@ const { logger } = require("../../utilities/winston");
 // since it's fetching here. Shouldn't be doing that here.
 function item(result) {
   const title = result.Name;
-  const favicon = "https://xivapi.com/favicon.png";
   const thumbnail = result.IconHD
     ? `https://xivapi.com/${result.IconHD}?${process.env.XIV_API_KEY}`
     : `https://xivapi.com/${result.Icon}?${process.env.XIV_API_KEY}`;
-  const description = result.Description;
+  //const description = result.Description;
 
   return new EmbedBuilder()
     .setColor("Green")
     .setTitle(title)
-    .setFooter({ text: "Brought to you by XIVAPI, meow!", iconURL: favicon })
+    .setFooter({ text: "XIVAPI", iconURL: "https://xivapi.com/favicon.png" })
     .setThumbnail(thumbnail)
-    .setDescription(description);
+    .setTimestamp();
+    //.setDescription(description);
 }
 
 module.exports = {
@@ -52,6 +52,7 @@ module.exports = {
 
         // Some items aren't working.
         // Need to look into why.
+        // Some items don't have descriptions??
         return await interaction.editReply({ embeds: [item(result)] });
       }
     } catch (error) {
