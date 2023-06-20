@@ -12,6 +12,7 @@ const { logger } = require("../utilities/winston");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 client.cooldown = new Collection();
+client.xivcache = new Collection();
 
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs
