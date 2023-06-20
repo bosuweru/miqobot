@@ -4,9 +4,27 @@ const Time = require("@sapphire/duration").Time;
 const EmbedBuilder = require("discord.js").EmbedBuilder;
 const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
 
-const request = require("undici").request;
-
+const { fetch } = require("../../api/xivapi");
 const { logger } = require("../../utilities/winston");
+
+// Need to do something about this.
+// Maybe make it possible to get the thumbnail from xivapi.js,
+// since it's fetching here. Shouldn't be doing that here.
+function item(result) {
+  const title = result.Name;
+  const favicon = "https://xivapi.com/favicon.png";
+  const thumbnail = result.IconHD
+    ? `https://xivapi.com/${result.IconHD}?${process.env.XIV_API_KEY}`
+    : `https://xivapi.com/${result.Icon}?${process.env.XIV_API_KEY}`;
+  const description = result.Description;
+
+  return new EmbedBuilder()
+    .setColor("Green")
+    .setTitle(title)
+    .setFooter({ text: "Brought to you by XIVAPI, meow!", iconURL: favicon })
+    .setThumbnail(thumbnail)
+    .setDescription(description);
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,33 +34,29 @@ module.exports = {
       subcommand
         .setName("item")
         .setDescription("Returns information about a specific item.")
+        .addStringOption((option) =>
+          option
+            .setName("id")
+            .setDescription("Enter an item's identification value.")
+            .setRequired(true)
+        )
     ),
   cooldown: 10000 / Time.Second,
   async execute(interaction) {
     try {
       await interaction.deferReply();
 
-      const result = await request(
-        `https://xivapi.com/item/1?private_key=${process.env.XIV_API_KEY}`
-      );
-      const data = await result.body.json();
+      if (interaction.options.getSubcommand() === "item") {
+        const id = interaction.options.getString("id");
+        const result = await fetch(interaction.options.getSubcommand(), id);
 
-      await interaction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("Green")
-            .setTitle(data.Name)
-            .setFooter({
-              text: "XIVAPI",
-              iconURL: "https://xivapi.com/favicon.png",
-            })
-            .setDescription(data.Description)
-            .setThumbnail(`https://xivapi.com${data.IconHD}`),
-        ],
-      });
+        // Some items aren't working.
+        // Need to look into why.
+        return await interaction.editReply({ embeds: [item(result)] });
+      }
     } catch (error) {
       const exception = `${error.message}`;
-      logger.error(`Command[${this.name}]: ${exception}`);
+      logger.error(`Command[${this.data.name}]: ${exception}`);
     }
   },
 };
