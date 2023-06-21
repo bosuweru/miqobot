@@ -23,7 +23,7 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "test": "cross-env NODE_ENV=staging nyc mocha",
+    "test": "cross-env NODE_ENV=workflow nyc mocha",
     "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env",
     "deploy:production": "node ./src/scripts/deployment.js",
     "deploy:development": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env"
