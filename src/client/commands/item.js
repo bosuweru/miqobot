@@ -1,9 +1,21 @@
 "use strict";
 
 const { logger } = require("../../utilities/winston");
-const { fetchable } = require("../../api/xivapi");
+const { request } = require("undici");
 const { Second, Millisecond } = require("@sapphire/duration").Time;
 const { Collection, EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+
+async function fetchable(args, ...kwargs) {
+  try {
+    const url = `https://xivapi.com/${args}/${kwargs[0]}?private_key=${process.env.XIVAPI_PRIVATE_KEY}`;
+    const req = await request(url);
+
+    return await req.body.json();
+  } catch (error) {
+    const exception = `${error.message}`;
+    logger.error(`${exception}`);
+  }
+}
 
 function nya() {
   return new EmbedBuilder()
@@ -17,11 +29,8 @@ function meow(result) {
     .setColor("Green")
     .setTitle(result.Name)
     .setFooter({ text: "XIVAPI", iconURL: "https://xivapi.com/favicon.png" })
-    .setThumbnail(
-      `https://xivapi.com${result.IconHD}?private_key=${process.env.XIVAPI_PRIVATE_KEY}`
-    )
     .setTimestamp()
-    .setDescription(result.Description);
+    .setDescription(result.Description || "No description available.");
 }
 
 module.exports = {
