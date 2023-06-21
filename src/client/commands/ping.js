@@ -1,10 +1,8 @@
 "use strict";
 
-const Time = require("@sapphire/duration").Time;
-const EmbedBuilder = require("discord.js").EmbedBuilder;
-const SlashCommandBuilder = require("discord.js").SlashCommandBuilder;
-
 const { logger } = require("../../utilities/winston");
+const { Second } = require("@sapphire/duration").Time;
+const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
 
 /* istanbul ignore next */
 function onPing(message, interaction) {
@@ -29,7 +27,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Measures RTT and websocket heartbeat."),
-  cooldown: 3000 / Time.Second,
+  cooldown: 3000 / Second,
   async execute(interaction) {
     try {
       const message = await interaction.reply({
@@ -44,7 +42,7 @@ module.exports = {
       });
     } catch (error) {
       const exception = `${error.message}`;
-      logger.error(`Command[${this.data.name}]: ${exception}`);
+      logger.error(`${exception}`);
     }
   },
 };
