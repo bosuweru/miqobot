@@ -5,9 +5,9 @@ const { request } = require("undici");
 const { Second, Millisecond } = require("@sapphire/duration").Time;
 const { Collection, EmbedBuilder, SlashCommandBuilder } = require("discord.js");
 
-async function fetchable(args, ...kwargs) {
+async function fetch(args, ...params) {
   try {
-    const url = `https://xivapi.com/${args}/${kwargs[0]}?private_key=${process.env.XIVAPI_PRIVATE_KEY}`;
+    const url = `https://xivapi.com/${args}/${params[0]}?private_key=${process.env.XIVAPI_PRIVATE_KEY}`;
     const req = await request(url);
 
     return await req.body.json();
@@ -17,20 +17,20 @@ async function fetchable(args, ...kwargs) {
   }
 }
 
-function nya() {
+function error() {
   return new EmbedBuilder()
     .setColor("Red")
-    .setTitle("Nya?!")
-    .setDescription("I can't seem to find any information about that item.");
+    .setTitle("Error")
+    .setDescription("Please use the autocomplete feature.");
 }
 
-function meow(result) {
+function build(result) {
   return new EmbedBuilder()
     .setColor("Green")
     .setTitle(result.Name)
     .setFooter({ text: "XIVAPI", iconURL: "https://xivapi.com/favicon.png" })
     .setTimestamp()
-    .setDescription(result.Description || "No description available.");
+    .setDescription(result.Description || "No description provided.");
 }
 
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
         .setRequired(true)
         .setAutocomplete(true)
     ),
-  cooldown: 10000 / Second,
+  cooldown: 5000 / Second,
   async execute(interaction) {
     try {
       if (!interaction.client.xivcache.has(this.data.name))
@@ -60,7 +60,7 @@ module.exports = {
 
       if (!data.length)
         return await interaction.reply({
-          embeds: [nya()],
+          embeds: [error()],
           ephemeral: true,
           fetchReply: false,
         });
@@ -71,20 +71,21 @@ module.exports = {
 
       if (items.has(query.id)) {
         const result = items.get(query.id);
+
         return await interaction.reply({
-          embeds: [meow(result)],
+          embeds: [build(result)],
           ephemeral: false,
           fetchReply: false,
         });
       }
 
       await interaction.deferReply();
-      const result = await fetchable(this.data.name, query.id);
 
+      const result = await fetch(this.data.name, query.id);
       items.set(query.id, result);
       setTimeout(() => items.delete(query.id), delay);
 
-      return await interaction.editReply({ embeds: [meow(result)] });
+      return await interaction.editReply({ embeds: [build(result)] });
     } catch (error) {
       const exception = `${error.message}`;
       logger.error(`${exception}`);
