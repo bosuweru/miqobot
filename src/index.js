@@ -5,7 +5,7 @@ const path = require("node:path");
 const { logger } = require("./utilities/winston");
 const { ShardingManager } = require("discord.js");
 
-const manager = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
+const manage = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
   mode: "process",
   token: process.env.SECRET_TOKEN,
   respawn:
@@ -18,11 +18,11 @@ const manager = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
   totalShards: "auto",
 });
 
-manager.on("shardCreate", (shard) => {
+manage.on("shardCreate", (shard) => {
   logger.info(`Shard [${shard.id}] created.`);
 });
 
 /* istanbul ignore if */
-if (process.env.NODE_ENV !== "workflow") manager.spawn();
+if (process.env.NODE_ENV !== "workflow") manage.spawn();
 
-module.exports = { manager };
+module.exports = { manage };
