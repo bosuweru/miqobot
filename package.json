@@ -13,7 +13,7 @@
   "main": "src/index.js",
   "name": "miqobot",
   "mocha": {
-    "spec": "src/test/**/*.js"
+    "spec": "src/tests/**/*.js"
   },
   "author": {
     "url": "https://github.com/bosuweru",
