@@ -25,8 +25,8 @@
   "scripts": {
     "test": "cross-env NODE_ENV=workflow nyc mocha",
     "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env",
-    "deploy:production": "node ./src/scripts/deployment.js",
-    "deploy:development": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env"
+    "deployment:dev": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env",
+    "deployment:prod": "node ./src/scripts/deployment.js"
   },
   "version": "2.2.0",
   "description": "A multipurpose and open-source Discord bot that interacts with XIVAPI.",
