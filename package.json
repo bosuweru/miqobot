@@ -1,7 +1,10 @@
 {
   "nyc": {
     "include": "**",
-    "exclude": ["**/__mocks__/", "**/*.spec.js"],
+    "exclude": [
+      "**/__mocks__/",
+      "**/*.spec.js"
+    ],
     "reporter": [
       "lcov",
       "text"
@@ -10,7 +13,7 @@
   "main": "src/index.js",
   "name": "miqobot",
   "mocha": {
-    "spec": "src/test/**/*.js"
+    "spec": "src/tests/**/*.js"
   },
   "author": {
     "url": "https://github.com/bosuweru",
@@ -20,12 +23,12 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "test": "cross-env NODE_ENV=staging nyc mocha",
+    "test": "cross-env NODE_ENV=workflow nyc mocha",
     "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env",
-    "deploy:production": "node ./src/scripts/deployment.js",
-    "deploy:development": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env"
+    "deployment:dev": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env",
+    "deployment:prod": "node ./src/scripts/deployment.js"
   },
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A multipurpose and open-source Discord bot that interacts with XIVAPI.",
   "eslintConfig": {
     "env": {
@@ -46,6 +49,7 @@
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.0",
     "dotenv-expand": "^10.0.0",
+    "undici": "^5.22.1",
     "winston": "^3.9.0"
   },
   "devDependencies": {

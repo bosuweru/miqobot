@@ -1,4 +1,4 @@
-name: Deployment Workflow
+name: C/D Workflow
 
 on:
   push:
@@ -14,13 +14,10 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: "16.17.0"
       - name: Install Dependencies
-        run: npm install
-        env:
-          NODE_ENV: ${{ secrets.NODE_ENV }}
-      - name: Deploy Slash Commands
-        run: npm run deploy:production
+        run: npm install --omit=dev
+      - name: Continuous Deployment
+        run: npm run deployment:prod
         env:
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
-          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}

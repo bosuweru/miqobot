@@ -3,15 +3,33 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const Client = require("discord.js").Client;
-const Collection = require("discord.js").Collection;
-const GatewayIntentBits = require("discord.js").GatewayIntentBits;
-
 const { logger } = require("../utilities/winston");
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 client.cooldown = new Collection();
+client.datasets = new Collection();
+client.xivcache = new Collection();
+
+client.datasets.set("item", new Collection());
+
+const jsonPath = path.join(__dirname, "../assets/data");
+const jsonList = fs
+  .readdirSync(jsonPath)
+  .filter((file) => file.endsWith(".json"));
+
+for (const json of jsonList) {
+  const dataPath = path.join(jsonPath, json);
+  const data = require(dataPath);
+
+  if (json.includes("item")) {
+    const collection = client.datasets.get("item");
+    data.Results.forEach((item) => {
+      if (item.Name) collection.set(item.ID, item.Name);
+    });
+  }
+}
 
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs
@@ -19,14 +37,11 @@ const eventFiles = fs
   .filter((file) => file.endsWith(".js"));
 
 for (const file of eventFiles) {
-  const eventPath = path.join(eventsPath, file);
-  const event = require(eventPath);
+  const filePath = path.join(eventsPath, file);
+  const event = require(filePath);
 
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args));
-  }
+  if (event.once) client.once(event.name, (...args) => event.execute(...args));
+  else client.on(event.name, (...args) => event.execute(...args));
 }
 
 const commandsPath = path.join(__dirname, "commands");
@@ -42,12 +57,14 @@ for (const file of commandFiles) {
   if ("data" in command && "execute" in command) {
     client.commands.set(command.data.name, command);
   } else {
-    const warning = `"${filePath}" is missing a required "data" or "execute" property`;
-    logger.warn(`Client[miqobot]: ${warning}.`);
+    const warning = `"${filePath}" is missing a required "data" or "execute" property.`;
+    logger.warn(`${warning}`);
   }
 }
 
-/* istanbul ignore if */
-if (process.env.NODE_ENV !== "staging") client.login(process.env.SECRET_TOKEN);
+client.login(process.env.SECRET_TOKEN).catch((error) => {
+  const exception = `${error.message}`;
+  logger.error(`${exception}`);
+});
 
 module.exports = { client };
