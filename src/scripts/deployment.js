@@ -21,16 +21,16 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
+const { miqobot } = require("../assets/configuration/miqobot.configuration.json");
+const { guild, client } = miqobot;
+
 /* istanbul ignore if */
-if (process.env.NODE_ENV !== "staging") {
+if (process.env.NODE_ENV !== "workflow") {
   const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
   if (process.env.NODE_ENV === "development") {
-    // const { miqobot } = require("../../private/configuration/miqobot.json");
-    // const { client, server } = miqobot;
-
     rest
-      .put(Routes.applicationGuildCommands("1112420494411583488", "1112862228044066816"), {
+      .put(Routes.applicationGuildCommands(client.development.id, guild.id), {
         body: commands,
       })
       .then((data) => {
@@ -42,10 +42,8 @@ if (process.env.NODE_ENV !== "staging") {
         logger.error(`Script[deployment]: ${exception}.`);
       });
   } else {
-    const client = { id: process.env.APPLICATION_ID };
-
     rest
-      .put(Routes.applicationCommands(client.id), {
+      .put(Routes.applicationCommands(client.production.id), {
         body: commands,
       })
       .then((data) => {
