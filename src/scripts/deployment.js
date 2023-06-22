@@ -21,7 +21,8 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
-const miqobot = require("../assets/configuration/miqobot.configuration.json");
+// eslint-disable-next-line prettier/prettier
+const { miqobot } = require("../assets/configuration/miqobot.configuration.json");
 const { guild, client } = miqobot;
 
 /* istanbul ignore if */
