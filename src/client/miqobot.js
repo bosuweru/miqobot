@@ -14,7 +14,7 @@ client.xivcache = new Collection();
 
 client.datasets.set("item", new Collection());
 
-const jsonPath = path.join(__dirname, "../../private/data");
+const jsonPath = path.join(__dirname, "../assets/data");
 const jsonList = fs
   .readdirSync(jsonPath)
   .filter((file) => file.endsWith(".json"));
