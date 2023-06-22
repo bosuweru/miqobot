@@ -9,7 +9,7 @@ const logger = winston.createLogger({
       : "info",
   levels: winston.config.npm.levels,
   silent:
-    process.env.NODE_ENV === "staging"
+    process.env.NODE_ENV === "workflow"
       ? true
       : /* istanbul ignore next */ false,
   transports: [],
@@ -21,12 +21,10 @@ const logger = winston.createLogger({
 
 const consoleFormat = winston.format.combine(
   winston.format.colorize(),
-  winston.format.timestamp({ format: "YYYY-MM-DD hh:mm:ss" }),
+  winston.format.timestamp({}),
   winston.format.printf(
     /* istanbul ignore next */ ({ level, message, timestamp }) => {
-      if (process.env.NODE_ENV === "development")
-        return `${timestamp} [${level}] ${message}`;
-      else return `[${level}] ${message}`;
+      return `${timestamp} [${level}] ${message}`;
     }
   )
 );
