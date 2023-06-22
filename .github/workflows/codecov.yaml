@@ -11,10 +11,10 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: "16.17.0"
       - name: Install Dependencies
         run: npm install
-      - name: Run Tests
+      - name: Mocha Test Framework
         run: npm test
       - name: Codecov Upload
         uses: codecov/codecov-action@v3
