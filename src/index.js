@@ -5,7 +5,7 @@ const path = require("node:path");
 const { logger } = require("./utilities/winston");
 const { ShardingManager } = require("discord.js");
 
-const manage = new ShardingManager(path.join(__dirname, "client/miqobot.js"), {
+const manage = new ShardingManager(path.join(__dirname, "client/client.js"), {
   mode: "process",
   token: process.env.SECRET_TOKEN,
   respawn:
