@@ -26,11 +26,11 @@ if (process.env.NODE_ENV !== "staging") {
   const rest = new REST().setToken(process.env.SECRET_TOKEN);
 
   if (process.env.NODE_ENV === "development") {
-    const { miqobot } = require("../../private/configuration/miqobot.json");
-    const { client, server } = miqobot;
+    // const { miqobot } = require("../../private/configuration/miqobot.json");
+    // const { client, server } = miqobot;
 
     rest
-      .put(Routes.applicationGuildCommands(client.id, server.id), {
+      .put(Routes.applicationGuildCommands("1112420494411583488", "1112862228044066816"), {
         body: commands,
       })
       .then((data) => {
