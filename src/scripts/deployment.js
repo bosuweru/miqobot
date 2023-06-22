@@ -34,7 +34,7 @@ if (process.env.NODE_ENV !== "workflow") {
         body: commands,
       })
       .then((data) => {
-        const result = `${data.length} guild application (/) commands`;
+        const result = `${data.length} guild application commands`;
         logger.info(`Script[deployment]: Refreshed ${result}.`);
       })
       .catch((error) => {
@@ -47,7 +47,7 @@ if (process.env.NODE_ENV !== "workflow") {
         body: commands,
       })
       .then((data) => {
-        const result = `${data.length} application (/) commands`;
+        const result = `${data.length} application commands`;
         logger.info(`Script[deployment]: Refreshed ${result}.`);
       })
       .catch((error) => {
