@@ -4,18 +4,17 @@ const { logger } = require("../../utilities/winston");
 const { Second } = require("@sapphire/duration").Time;
 const { Events, Collection, EmbedBuilder } = require("discord.js");
 
-function onCooldown(command, remaining) {
-  const description = `You are on a cooldown for \`${command.data.name}\`. You can use it again <t:${remaining}:R>.`;
-
-  return new EmbedBuilder()
-    .setColor("Red")
-    .setTitle("Slow down!")
-    .setDescription(description);
-}
-
 module.exports = {
   name: Events.InteractionCreate,
   once: false,
+  onCooldown(command, remaining) {
+    const description = `You are on a cooldown for \`${command.data.name}\`. You can use it again <t:${remaining}:R>.`;
+
+    return new EmbedBuilder()
+      .setColor("Red")
+      .setTitle("Slow down!")
+      .setDescription(description);
+  },
   async execute(interaction) {
     try {
       if (interaction.isAutocomplete()) {
@@ -47,7 +46,7 @@ module.exports = {
             const remaining = Math.round(milliseconds / Second);
 
             return await interaction.reply({
-              embeds: [onCooldown(command, remaining)],
+              embeds: [this.onCooldown(command, remaining)],
               ephemeral: true,
               fetchReply: false,
             });
@@ -55,7 +54,10 @@ module.exports = {
         }
 
         timestamps.set(interaction.user.id, utc);
-        setTimeout(() => timestamps.delete(interaction.user.id), cooldown);
+
+        /* istanbul ignore if */
+        if (process.env.NODE_ENV !== "workflow")
+          setTimeout(() => timestamps.delete(interaction.user.id), cooldown);
 
         return await command.execute(interaction);
       }
