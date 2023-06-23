@@ -80,7 +80,10 @@ module.exports = {
       const query = await this.fetch(this.data.name, id);
 
       cache.set(id, query);
-      setTimeout(() => cache.delete(id), delay);
+
+      /* istanbul ignore if */
+      if (process.env.NODE_ENV !== "workflow")
+        setTimeout(() => cache.delete(id), delay);
 
       return await interaction.editReply({ embeds: [this.build(query)] });
     } catch (error) {
