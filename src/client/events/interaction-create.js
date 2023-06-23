@@ -26,6 +26,7 @@ module.exports = {
         return await command.autocomplete(interaction);
       }
 
+      /* istanbul ignore else */
       if (interaction.isChatInputCommand()) {
         const { commandName } = interaction;
         const command = interaction.client.commands.get(commandName);
