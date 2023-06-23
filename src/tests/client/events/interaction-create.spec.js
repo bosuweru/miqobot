@@ -6,6 +6,9 @@ const events = require("../../../client/events/interaction-create");
 const { Time } = require("@sapphire/duration");
 const { Collection } = require("discord.js");
 
+// eslint-disable-next-line prettier/prettier
+const { miqobot } = require("../../../assets/configuration/miqobot.configuration.json");
+
 describe("src/client/events/interaction-create.js", function () {
   let interaction;
 
@@ -16,7 +19,7 @@ describe("src/client/events/interaction-create.js", function () {
   beforeEach(function () {
     interaction = {
       user: {
-        id: "1112420494411583488",
+        id: miqobot.client.development.id,
       },
       client: {
         cooldown: new Collection(),
