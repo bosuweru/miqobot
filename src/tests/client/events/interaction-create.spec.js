@@ -1,7 +1,7 @@
 "use strict";
 
 const expect = require("chai").expect;
-const events = require("../../../client/events/interaction-create");
+const event = require("../../../client/events/interaction-create");
 
 const { Time } = require("@sapphire/duration");
 const { Collection } = require("discord.js");
@@ -62,13 +62,13 @@ describe("src/client/events/interaction-create.js", function () {
       interaction.autocomplete = true;
       interaction.chatInputCommand = false;
 
-      let result = await events.execute(interaction);
+      let result = await event.execute(interaction);
       expect(result).to.be.undefined;
 
       interaction.autocomplete = false;
       interaction.chatInputCommand = true;
 
-      result = await events.execute(interaction);
+      result = await event.execute(interaction);
       expect(result).to.be.undefined;
     });
 
@@ -76,7 +76,7 @@ describe("src/client/events/interaction-create.js", function () {
       interaction.autocomplete = true;
       interaction.chatInputCommand = false;
 
-      const result = await events.execute(interaction);
+      const result = await event.execute(interaction);
       expect(result).to.be.true;
     });
 
@@ -84,10 +84,10 @@ describe("src/client/events/interaction-create.js", function () {
       interaction.autocomplete = false;
       interaction.chatInputCommand = true;
 
-      let result = await events.execute(interaction);
+      let result = await event.execute(interaction);
       expect(result).to.be.true;
 
-      result = await events.execute(interaction);
+      result = await event.execute(interaction);
       expect(result).to.be.true;
     });
 
@@ -95,7 +95,7 @@ describe("src/client/events/interaction-create.js", function () {
       interaction.autocomplete = false;
       interaction.chatInputCommand = false;
 
-      const result = await events.execute(interaction);
+      const result = await event.execute(interaction);
       expect(result).to.be.undefined;
     });
   });
