@@ -1,101 +1,55 @@
 "use strict";
 
 const expect = require("chai").expect;
-const event = require("../../../client/events/interaction-create");
-
-const { Time } = require("@sapphire/duration");
-const { Collection } = require("discord.js");
-
-// eslint-disable-next-line prettier/prettier
-const { miqobot } = require("../../../assets/configuration/miqobot.configuration.json");
+const events = require("../../../client/events/interaction-create");
+const params = require("./__mocks__/interaction-create.mock");
 
 describe("src/client/events/interaction-create.js", function () {
-  let interaction;
-
-  afterEach(function () {
-    for (const key in interaction) delete interaction[key];
-  });
-
   beforeEach(function () {
-    interaction = {
-      user: {
-        id: miqobot.client.development.id,
-      },
-      client: {
-        cooldown: new Collection(),
-        commands: {
-          get(string) {
-            return string === interaction.command.data.name
-              ? interaction.command
-              : false;
-          },
-        },
-      },
-      command: {
-        data: { name: "workflow" },
-        cooldown: 1000 / Time.Second,
-        execute(object) {
-          return object ? true : false;
-        },
-        autocomplete(object) {
-          return object ? true : false;
-        },
-      },
-      commandName: "workflow",
-      autocomplete: null,
-      chatInputCommand: null,
-      reply(object) {
-        return object ? true : false;
-      },
-      isAutocomplete() {
-        return this.autocomplete;
-      },
-      isChatInputCommand() {
-        return this.chatInputCommand;
-      },
-    };
+    if (!params.client.commands.has(params.command.data.name))
+      params.client.commands.set(params.command.data.name, params.command);
   });
 
   describe("InteractionCreate 'execute'", function () {
-    it("returns undefined if command not found", async function () {
-      interaction.commandName = "NaN";
-      interaction.autocomplete = true;
-      interaction.chatInputCommand = false;
+    it("returns true if command is executed successfully", async function () {
+      params.set.autocomplete = false;
+      params.set.chatInputCommand = true;
 
-      let result = await event.execute(interaction);
+      const result = await events.execute(params);
+      expect(result).to.be.true;
+    });
+
+    it("returns true if command is autocompleted successfully", async function () {
+      params.set.autocomplete = true;
+      params.set.chatInputCommand = false;
+
+      const result = await events.execute(params);
+      expect(result).to.be.true;
+    });
+
+    it("returns false if command is executed during cooldown period", async function () {
+      params.set.autocomplete = false;
+      params.set.chatInputCommand = true;
+
+      const result = await events.execute(params);
+      expect(result).to.be.false;
+    });
+
+    it("returns undefined if command is invalid or missing during execution", async function () {
+      params.set.autocomplete = false;
+      params.set.chatInputCommand = true;
+      params.client.commands.delete(params.command.data.name);
+
+      const result = await events.execute(params);
       expect(result).to.be.undefined;
-
-      interaction.autocomplete = false;
-      interaction.chatInputCommand = true;
-
-      result = await event.execute(interaction);
-      expect(result).to.be.undefined;
     });
 
-    it("returns true if interaction is autocomplete", async function () {
-      interaction.autocomplete = true;
-      interaction.chatInputCommand = false;
+    it("returns undefined if command is invalid or missing during autocompletion", async function () {
+      params.set.autocomplete = true;
+      params.set.chatInputCommand = false;
+      params.client.commands.delete(params.command.data.name);
 
-      const result = await event.execute(interaction);
-      expect(result).to.be.true;
-    });
-
-    it("returns true if interaction is chat input command", async function () {
-      interaction.autocomplete = false;
-      interaction.chatInputCommand = true;
-
-      let result = await event.execute(interaction);
-      expect(result).to.be.true;
-
-      result = await event.execute(interaction);
-      expect(result).to.be.true;
-    });
-
-    it("returns undefined if interaction is not autocomplete or chat input command", async function () {
-      interaction.autocomplete = false;
-      interaction.chatInputCommand = false;
-
-      const result = await event.execute(interaction);
+      const result = await events.execute(params);
       expect(result).to.be.undefined;
     });
   });
