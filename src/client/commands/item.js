@@ -19,7 +19,9 @@ module.exports = {
   cooldown: 5000 / Second,
   build(item) {
     const title = item.Name;
-    const description = item.Description || "No description provided.";
+    const description =
+      item.Description.replace(/(\r\n|\r|\n){2,}/g, "$1\n") ||
+      "No description provided.";
 
     let thumbnail;
     if (item.IconHD || item.Icon)
