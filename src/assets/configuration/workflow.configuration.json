@@ -1,7 +1,19 @@
 {
   "workflow": {
     "interaction": {
-      "commandName": "workflow"
+      "client": {
+        "ws": {
+          "ping": 0
+        }
+      },
+      "command": {
+        "data": {
+          "name": "workflow"
+        },
+        "cooldown": 1000
+      },
+      "commandName": "workflow",
+      "createdTimestamp": 0
     }
   }
 }
