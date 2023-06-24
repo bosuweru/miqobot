@@ -11,7 +11,7 @@ describe("src/client/events/interaction-create.js", function () {
   });
 
   describe("InteractionCreate 'execute'", function () {
-    it("returns true if command is executed successfully", async function () {
+    it("returns true if interaction is executed successfully", async function () {
       params.set.autocomplete = false;
       params.set.chatInputCommand = true;
 
@@ -19,7 +19,7 @@ describe("src/client/events/interaction-create.js", function () {
       expect(result).to.be.true;
     });
 
-    it("returns true if command is autocompleted successfully", async function () {
+    it("returns true if interaction is autocompleted successfully", async function () {
       params.set.autocomplete = true;
       params.set.chatInputCommand = false;
 
@@ -27,7 +27,7 @@ describe("src/client/events/interaction-create.js", function () {
       expect(result).to.be.true;
     });
 
-    it("returns false if command is executed during cooldown period", async function () {
+    it("returns false if interaction is executed during cooldown period", async function () {
       params.set.autocomplete = false;
       params.set.chatInputCommand = true;
 
@@ -35,7 +35,7 @@ describe("src/client/events/interaction-create.js", function () {
       expect(result).to.be.false;
     });
 
-    it("returns undefined if command is invalid or missing during execution", async function () {
+    it("returns undefined if interaction is invalid or missing during execution", async function () {
       params.set.autocomplete = false;
       params.set.chatInputCommand = true;
       params.client.commands.delete(params.command.data.name);
@@ -44,7 +44,7 @@ describe("src/client/events/interaction-create.js", function () {
       expect(result).to.be.undefined;
     });
 
-    it("returns undefined if command is invalid or missing during autocompletion", async function () {
+    it("returns undefined if interaction is invalid or missing during autocompletion", async function () {
       params.set.autocomplete = true;
       params.set.chatInputCommand = false;
       params.client.commands.delete(params.command.data.name);
