@@ -12,7 +12,6 @@ const { interaction } = workflow;
 
 module.exports = {
   set: {
-    commandName: "workflow",
     autocomplete: null,
     isChatInputCommand: null,
   },
