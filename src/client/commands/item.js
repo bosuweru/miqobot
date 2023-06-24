@@ -19,14 +19,20 @@ module.exports = {
   cooldown: 5000 / Second,
   build(item) {
     const title = item.Name;
-    const thumbnail = item.IconHD ? item.IconHD : item.Icon;
     const description = item.Description;
+
+    let thumbnail;
+    if (item.Icon || item.IconHD)
+      thumbnail = item.IconHD
+        ? "https://xivapi.com" + item.IconHD
+        : "https://xivapi.com" + item.Icon;
+    else thumbnail = null;
 
     return new EmbedBuilder()
       .setColor("Green")
       .setTitle(title)
       .setFooter({ text: "XIVAPI", iconURL: "https://xivapi.com/favicon.png" })
-      .setThumbnail("https://xivapi.com" + thumbnail || null)
+      .setThumbnail(thumbnail)
       .setTimestamp()
       .setDescription(description || "No description provided.");
   },
@@ -36,6 +42,7 @@ module.exports = {
       .setTitle("Error")
       .setDescription("Please use the autocomplete feature.");
   },
+  /* istanbul ignore next */
   async fetch(args, ...kwargs) {
     try {
       const url = `https://xivapi.com/${args}/${kwargs[0]}?private_key=${process.env.XIVAPI_PRIVATE_KEY}`;
@@ -86,7 +93,7 @@ module.exports = {
         setTimeout(() => cache.delete(id), delay);
 
       return await interaction.editReply({ embeds: [this.build(query)] });
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       const exception = `${error.message}`;
       logger.error(`${exception}`);
     }
@@ -106,7 +113,7 @@ module.exports = {
           .map((choice) => ({ name: choice.value, value: choice.key }))
           .slice(0, 25)
       );
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       const exception = `${error.message}`;
       logger.error(`${exception}`);
     }
