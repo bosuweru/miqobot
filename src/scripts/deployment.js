@@ -35,12 +35,12 @@ if (process.env.NODE_ENV !== "workflow") {
         body: commands,
       })
       .then((data) => {
-        const result = `${data.length} guild application commands`;
-        logger.info(`Script[deployment]: Refreshed ${result}.`);
+        const result = `Refreshed ${data.length} guild application commands`;
+        logger.info(`${result}.`);
       })
       .catch((error) => {
         const exception = `${error.message}`;
-        logger.error(`Script[deployment]: ${exception}.`);
+        logger.error(`${exception}.`);
       });
   } else {
     rest
@@ -48,12 +48,12 @@ if (process.env.NODE_ENV !== "workflow") {
         body: commands,
       })
       .then((data) => {
-        const result = `${data.length} application commands`;
-        logger.info(`Script[deployment]: Refreshed ${result}.`);
+        const result = `Refreshed ${data.length} application commands`;
+        logger.info(`${result}.`);
       })
       .catch((error) => {
         const exception = `${error.message}`;
-        logger.error(`Script[deployment]: ${exception}.`);
+        logger.error(`${exception}.`);
       });
   }
 }
