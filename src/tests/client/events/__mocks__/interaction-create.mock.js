@@ -22,8 +22,8 @@ module.exports = {
     commands: new Collection(),
   },
   command: {
-    data: { name: "workflow" },
-    cooldown: 1000 / Time.Second,
+    data: { name: interaction.command.data.name },
+    cooldown: interaction.command.cooldown / Time.Second,
     execute(object) {
       return object ? true : false;
     },
