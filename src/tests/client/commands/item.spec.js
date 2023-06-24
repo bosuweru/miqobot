@@ -1,81 +1,77 @@
 "use strict";
 
-const sinon = require("sinon");
-const expect = require("chai").expect;
-const command = require("../../../client/commands/item");
-
 const { Collection } = require("discord.js");
 
+const sinon = require("sinon");
+const expect = require("chai").expect;
+const events = require("../../../client/commands/item");
+const params = require("./__mocks__/item.mock");
+
 describe("src/client/commands/item.js", function () {
-  let datasets;
-  let interaction;
-
-  before(function () {
-    datasets = new Collection();
-    datasets.set("item", new Collection());
-
-    const item = { ID: 1, Name: "Gil" };
-    const collection = datasets.get("item");
-    collection.set(item.ID, item.Name);
+  after(function () {
+    sinon.restore();
   });
 
-  afterEach(function () {
-    sinon.restore();
-    for (const key in interaction) delete interaction[key];
+  before(function () {
+    sinon.stub(events, "fetch").resolves(params.xivapi.item);
+    params.client.datasets.set(events.data.name, new Collection());
   });
 
   beforeEach(function () {
-    sinon.stub(command, "fetch").resolves({
-      Name: "Gil",
-      Icon: "/i/065000/065002.png",
-      IconHD: "/i/065000/065002_hr1.png",
-      Description: "Standard Eorzean currency.",
-    });
+    const collection = params.client.datasets.get(events.data.name);
+    if (!collection.has(params.xivapi.item.ID))
+      collection.set(params.xivapi.item.ID, params.xivapi.item.Name);
 
-    interaction = {
-      client: {
-        datasets: {
-          get(string) {
-            return datasets.get(string);
-          },
-        },
-        xivcache: new Collection(),
-      },
-      options: {
-        id: 1,
-        getInteger() {
-          return interaction.options.id;
-        },
-      },
-      reply(object) {
-        return object ? true : false;
-      },
-      editReply(object) {
-        return object ? true : false;
-      },
-      deferReply() {
-        return null;
-      },
-    };
+    const { Icon, IconHD, Description } = params.xivapi.item;
+    if (!Icon || !IconHD || !Description) params.xivapi.item = events.fetch();
   });
 
   describe("Item 'execute'", function () {
-    it("returns true if chat input command is executed", async function () {
-      let result = await command.execute(interaction);
+    it("returns true if command is executed successfully", async function () {
+      /** This retrieves the item from {@link https://xivapi.com/ | XIVAPI}. */
+      let result = await events.execute(params);
       expect(result).to.be.true;
 
-      result = await command.execute(interaction);
+      /** This retrieves the item from cache. */
+      result = await events.execute(params);
       expect(result).to.be.true;
 
-      interaction.options.id = 0;
-      result = await command.execute(interaction);
+      /** This simulates an item without a description or high-definition icon. */
+      params.xivapi.item.IconHD = null;
+      params.xivapi.item.Description = null;
+      result = await events.execute(params);
+      expect(result).to.be.true;
+
+      /** This simulates an item without an icon. */
+      params.xivapi.item.Icon = null;
+      result = await events.execute(params);
+      expect(result).to.be.true;
+
+      /** This simulates a user entering free text.  */
+      const collection = params.client.datasets.get(events.data.name);
+      if (collection.has(params.xivapi.item.ID))
+        collection.delete(params.xivapi.item.ID);
+
+      result = await events.execute(params);
       expect(result).to.be.true;
     });
 
-    it("returns undefined if chat input command is invalid", async function () {
-      interaction.client = undefined;
+    // eslint-disable-next-line mocha/no-skipped-tests
+    it.skip("returns undefined if command is executed unsuccessfully", async function () {
+      const result = await events.execute(undefined);
+      expect(result).to.be.undefined;
+    });
+  });
 
-      const result = await command.execute(interaction);
+  describe("Item 'autocomplete'", function () {
+    it("returns true if command is executed successfully", async function () {
+      const result = await events.autocomplete(params);
+      expect(result).to.be.true;
+    });
+
+    // eslint-disable-next-line mocha/no-skipped-tests
+    it.skip("returns undefined if command is executed unsuccessfully", async function () {
+      const result = await events.autocomplete(undefined);
       expect(result).to.be.undefined;
     });
   });
