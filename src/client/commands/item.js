@@ -19,10 +19,10 @@ module.exports = {
   cooldown: 5000 / Second,
   build(item) {
     const title = item.Name;
-    const description = item.Description;
+    const description = item.Description || "No description provided.";
 
     let thumbnail;
-    if (item.Icon || item.IconHD)
+    if (item.IconHD || item.Icon)
       thumbnail = item.IconHD
         ? "https://xivapi.com" + item.IconHD
         : "https://xivapi.com" + item.Icon;
@@ -34,7 +34,7 @@ module.exports = {
       .setFooter({ text: "XIVAPI", iconURL: "https://xivapi.com/favicon.png" })
       .setThumbnail(thumbnail)
       .setTimestamp()
-      .setDescription(description || "No description provided.");
+      .setDescription(description);
   },
   error() {
     return new EmbedBuilder()
@@ -93,7 +93,7 @@ module.exports = {
         setTimeout(() => cache.delete(id), delay);
 
       return await interaction.editReply({ embeds: [this.build(query)] });
-    } catch (error) /* istanbul ignore next */ {
+    } catch (error) {
       const exception = `${error.message}`;
       logger.error(`${exception}`);
     }
@@ -113,7 +113,7 @@ module.exports = {
           .map((choice) => ({ name: choice.value, value: choice.key }))
           .slice(0, 25)
       );
-    } catch (error) /* istanbul ignore next */ {
+    } catch (error) {
       const exception = `${error.message}`;
       logger.error(`${exception}`);
     }

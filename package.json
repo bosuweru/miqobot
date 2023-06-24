@@ -28,7 +28,7 @@
     "deployment:dev": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env",
     "deployment:prod": "node ./src/scripts/deployment.js"
   },
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A multipurpose and open-source Discord bot that interacts with XIVAPI.",
   "eslintConfig": {
     "env": {
