@@ -49,6 +49,7 @@
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "dotenv-expand": "^10.0.0",
+    "node-cron": "^3.0.2",
     "undici": "^5.22.1",
     "winston": "^3.9.0"
   },
