@@ -62,6 +62,9 @@ for (const file of commandFiles) {
   }
 }
 
+const tasks = require("../server/cron");
+tasks.cronJobs(client);
+
 client.login(process.env.SECRET_TOKEN).catch((error) => {
   const exception = `${error.message}`;
   logger.error(`${exception}`);
