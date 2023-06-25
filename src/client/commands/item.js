@@ -92,7 +92,9 @@ module.exports = {
 
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== "workflow")
-        setTimeout(() => cache.delete(id), delay);
+        setTimeout(() => {
+          if (cache.has(id)) cache.delete(id);
+        }, delay);
 
       return await interaction.editReply({ embeds: [this.build(query)] });
     } catch (error) {
