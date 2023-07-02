@@ -1,5 +1,5 @@
-logs
+# Ignore the private directory.
 private
-coverage
-.nyc_output
+
+# Ignore the node_modules directory.
 node_modules
