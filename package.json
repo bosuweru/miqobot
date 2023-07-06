@@ -1,68 +1,59 @@
 {
-  "nyc": {
-    "include": "**",
-    "exclude": [
-      "**/__mocks__/",
-      "**/*.spec.js"
-    ],
-    "reporter": [
-      "lcov",
-      "text"
-    ]
+  "bugs": {
+    "url": "https://github.com/bosuweru/miqobot/issues",
+    "email": "116328571+bosuweru@users.noreply.github.com"
   },
-  "main": "src/index.js",
-  "name": "miqobot",
-  "mocha": {
-    "spec": "src/tests/**/*.js"
-  },
+  "main": "dist/index.js",
+  "name": "@bosuweru/miqobot",
   "author": {
     "url": "https://github.com/bosuweru",
-    "name": "Allan",
+    "name": "Dandy!",
     "email": "116328571+bosuweru@users.noreply.github.com"
+  },
+  "engines": {
+    "npm": ">=9.5.1",
+    "node": ">=18.16.1"
   },
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "test": "cross-env NODE_ENV=workflow nyc mocha",
-    "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env",
-    "deployment:dev": "node -r dotenv-expand/config ./src/scripts/deployment.js dotenv_config_path=private/.env",
-    "deployment:prod": "node ./src/scripts/deployment.js"
+    "build": "tsc",
+    "start": "node -r dotenv-expand/config . dotenv_config_path=private/.env"
   },
-  "version": "2.2.2",
+  "version": "3.0.0",
+  "homepage": "https://github.com/bosuweru/miqobot#readme",
+  "keywords": [
+    "bot",
+    "discord",
+    "xivapi"
+  ],
+  "repository": {
+    "url": "https://github.com/bosuweru/miqobot.git",
+    "type": "git"
+  },
   "description": "A multipurpose and open-source Discord bot that interacts with XIVAPI.",
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "browser": false
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:mocha/recommended",
-      "plugin:prettier/recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": "latest"
-    }
-  },
   "dependencies": {
-    "@sapphire/duration": "^1.1.0",
+    "@logtail/node": "^0.4.0",
+    "@logtail/winston": "^0.4.1",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "dotenv-expand": "^10.0.0",
-    "node-cron": "^3.0.2",
-    "undici": "^5.22.1",
-    "winston": "^3.9.0"
+    "winston": "^3.9.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.43.0",
+    "@tsconfig/node18": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
     "prettier": "^2.8.8",
-    "sinon": "^15.2.0"
+    "typescript": "^5.1.6"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^6.0.3",
+    "zlib-sync": "^0.1.8"
   }
 }
