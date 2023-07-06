@@ -1,5 +1,4 @@
-# Ignore the private directory.
+dist
+logs
 private
-
-# Ignore the node_modules directory.
 node_modules
