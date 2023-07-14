@@ -51,7 +51,7 @@
     "dotenv-expand": "^10.0.0",
     "node-cron": "^3.0.2",
     "undici": "^5.22.1",
-    "winston": "^3.9.0"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
